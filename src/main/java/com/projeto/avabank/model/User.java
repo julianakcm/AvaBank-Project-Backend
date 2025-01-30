@@ -34,7 +34,7 @@ public class User {
 	private String cpf;
 	
 	@Column(nullable = false)
-	private LocalDate dbirthDate;
+	private LocalDate birthDate;
 	
 	@Column(nullable = false, unique = true)
 	private String email;
@@ -57,7 +57,34 @@ public class User {
 	   @ManyToOne
 	    @JoinColumn(name = "id_Tipo_Usuario", nullable = false)
 	    private UserType userType;
+	   
+	   public LocalDate getBirthDate() {
+		return birthDate;
+	}
 
+
+	public void setBirthDate(LocalDate birthDate) {
+		this.birthDate = birthDate;
+	}
+
+
+	public Address getAddress() {
+		return address;
+	}
+
+
+	public void setAddress(Address address) {
+		this.address = address;
+	}
+	
+	//teste
+	
+	@ManyToOne
+	@JoinColumn(name = "user_id")
+	private User user;
+
+	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+	    private Address address;
 	   
 	    @OneToOne(mappedBy = "user",cascade = CascadeType.ALL, orphanRemoval = true)
 	    //private Set<Note> notes = new HashSet<>();
@@ -136,12 +163,12 @@ public class User {
 
 
 		public LocalDate getDbirthDate() {
-			return dbirthDate;
+			return birthDate;
 		}
 
 
 		public void setDbirthDate(LocalDate dbirthDate) {
-			this.dbirthDate = dbirthDate;
+			this.birthDate = dbirthDate;
 		}
 
 
@@ -202,6 +229,16 @@ public class User {
 
 		public void setAccount(Account account) {
 			this.account = account;
+		}
+
+
+		public User getUser() {
+			return user;
+		}
+
+
+		public void setUser(User user) {
+			this.user = user;
 		}
 
 

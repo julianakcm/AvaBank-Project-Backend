@@ -66,6 +66,14 @@ public class Address {
 		return street;
 	}
 
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
 	public void setStreet(String street) {
 		this.street = street;
 	}

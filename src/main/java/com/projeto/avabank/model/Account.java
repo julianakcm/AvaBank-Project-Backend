@@ -12,6 +12,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
@@ -48,6 +49,10 @@ public class Account {
 	@Column(nullable = false)
 	private int userId;
 	
+	
+	  @ManyToOne
+	    @JoinColumn(name = "user_id")
+	    private User user;
 	
 	@ManyToMany
     @JoinTable(
@@ -147,6 +152,14 @@ public class Account {
 
 	public void setUsuario(User usuario) {
 		this.usuario = usuario;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
     
     

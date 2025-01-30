@@ -19,147 +19,115 @@ import com.projeto.avabank.repository.TransactionsRepository;
 
 import jakarta.transaction.Transactional;
 
+@Service
+public class TransactionsService {
 
+    @Autowired
+    private AccountRepository accountRepository;
 
-	@Service
-	public class TransactionsService {
-	    @Autowired
-	    private AccountRepository accountRepository;
+    @Autowired
+    private TransactionsRepository transactionRepository;
 
-	    @Autowired
-	    private TransactionsRepository transactionRepository;
-	    
-	    
-	    @Transactional
-	    public Transactions realizarSaque(Long sourceAccountId, BigDecimal amount) throws AccountNotFoundException, InsufficientBalanceException {
-	        
-	        Account sourceAccount = accountRepository.findById(sourceAccountId)
-	                .orElseThrow(() -> new AccountNotFoundException("Account not found"));
-	     
-	       
-	        if (sourceAccount.getBalance().compareTo(amount) < 0) {
-	            throw new InsufficientBalanceException("Insufficient balance");
-	        }
-	     
-	      
-	        Transactions transaction = new Transactions();
-	        transaction.setSourceAccountId(sourceAccountId);
-	        transaction.setAmount(amount);
-	        transaction.setTransactionType("SAQUE");
-	        transaction.setTimestamp(LocalDateTime.now());
-	     
-	    
-	        sourceAccount.setBalance(sourceAccount.getBalance().subtract(amount));
-	     
-	  
-	        accountRepository.save(sourceAccount);
-	        transactionRepository.save(transaction);
-	     
-	        return transaction;
-	    }
-	    
-	    
+    @Transactional
+    public Transactions realizarSaque(Long sourceAccountId, BigDecimal amount) throws AccountNotFoundException, InsufficientBalanceException {
+        Account sourceAccount = accountRepository.findById(sourceAccountId)
+                .orElseThrow(() -> new AccountNotFoundException("Account not found"));
 
-	    public Transactions realizarDeposito(Long sourceAccountId, BigDecimal amount) throws AccountNotFoundException {
+        if (sourceAccount.getBalance().compareTo(amount) < 0) {
+            throw new InsufficientBalanceException("Insufficient balance");
+        }
 
-	    	Account sourceAccount = accountRepository.findById(sourceAccountId).orElseThrow(() -> new AccountNotFoundException("Account not found"));
-	    	 
-	        Transactions transaction = new Transactions();
-	        transaction.setSourceAccountId(sourceAccountId);
-	        transaction.setAmount(amount);
-	        transaction.setTransactionType("DEPOSITO");
-	        transaction.setTimestamp(LocalDateTime.now());
+        // Criando a transação
+        Transactions transaction = createTransaction(sourceAccountId, amount, "WITHDRAWAL");
+        sourceAccount.setBalance(sourceAccount.getBalance().subtract(amount));
 
-	       
-	        sourceAccount.setBalance(sourceAccount.getBalance().add(amount));
-	        accountRepository.save(sourceAccount);
+        accountRepository.save(sourceAccount);
+        transactionRepository.save(transaction);
 
+        return transaction;
+    }
 
-	        
-	        transactionRepository.save(transaction);
+    @Transactional
+    public Transactions realizarDeposito(Long sourceAccountId, BigDecimal amount) throws AccountNotFoundException {
+        Account sourceAccount = accountRepository.findById(sourceAccountId)
+                .orElseThrow(() -> new AccountNotFoundException("Account not found"));
 
-	        return transaction;
-	    }
-	    
+        // Criando a transação
+        Transactions transaction = createTransaction(sourceAccountId, amount, "DEPOSIT");
+        sourceAccount.setBalance(sourceAccount.getBalance().add(amount));
 
-	    public Transactions realizarTransferencia(Long sourceAccountId, Long destinationAccountId, BigDecimal amount) throws AccountNotFoundException, InsufficientBalanceException {
-	    	Account sourceAccount = accountRepository.findById(sourceAccountId).orElseThrow(() -> new AccountNotFoundException("Source account not found"));
-	        Account destinationAccount = accountRepository.findById(destinationAccountId).orElseThrow(() -> new AccountNotFoundException("Destination account not found"));
+        accountRepository.save(sourceAccount);
+        transactionRepository.save(transaction);
 
-	        if (sourceAccount.getBalance().compareTo(amount) < 0) {
-	            throw new InsufficientBalanceException("Insufficient balance to perform the transfer.");
-	        }
+        return transaction;
+    }
 
-	        Transactions transaction = new Transactions();
-	        transaction.setSourceAccountId(sourceAccountId);
-	        transaction.setDestinationAccountId(destinationAccountId);
-	        transaction.setAmount(amount);
-	        transaction.setTransactionType("TRANSFER");
-	        transaction.setTimestamp(LocalDateTime.now());
-	     
+    @Transactional
+    public Transactions realizarTransferencia(Long sourceAccountId, Long destinationAccountId, BigDecimal amount) throws AccountNotFoundException, InsufficientBalanceException {
+        Account sourceAccount = accountRepository.findById(sourceAccountId)
+                .orElseThrow(() -> new AccountNotFoundException("Source account not found"));
+        Account destinationAccount = accountRepository.findById(destinationAccountId)
+                .orElseThrow(() -> new AccountNotFoundException("Destination account not found"));
 
+        if (sourceAccount.getBalance().compareTo(amount) < 0) {
+            throw new InsufficientBalanceException("Insufficient balance to perform the transfer.");
+        }
 
-	   
-	        sourceAccount.setBalance(sourceAccount.getBalance().subtract(amount));
-	        destinationAccount.setBalance(destinationAccount.getBalance().add(amount));
-	        accountRepository.save(sourceAccount);
-	        accountRepository.save(destinationAccount);
+        // Criando transações
+        Transactions transaction = createTransaction(sourceAccountId, amount, "TRANSFER");
+        transaction.setDestinationAccountId(destinationAccountId);
 
+        sourceAccount.setBalance(sourceAccount.getBalance().subtract(amount));
+        destinationAccount.setBalance(destinationAccount.getBalance().add(amount));
 
-	    
-	        transactionRepository.save(transaction);
+        accountRepository.save(sourceAccount);
+        accountRepository.save(destinationAccount);
+        transactionRepository.save(transaction);
 
+        return transaction;
+    }
 
-	        return transaction;
-	    }
+    @Transactional
+    public Transactions realizarPix(Long sourceAccountId, String pix, BigDecimal amount) throws AccountNotFoundException, InsufficientBalanceException {
+        Account sourceAccount = accountRepository.findById(sourceAccountId)
+                .orElseThrow(() -> new AccountNotFoundException("Account not found"));
 
-	    public Transactions realizarPix(Long sourceAccountId, String pix, BigDecimal amount) throws AccountNotFoundException, InsufficientBalanceException {
+        if (sourceAccount.getBalance().compareTo(amount) < 0) {
+            throw new InsufficientBalanceException("Insufficient balance to perform the Pix.");
+        }
 
-	    	Account sourceAccount = accountRepository.findById(sourceAccountId).orElseThrow(() -> new AccountNotFoundException("Account not found"));
+        // Criando a transação
+        Transactions transaction = createTransaction(sourceAccountId, amount, "PIX");
+        transaction.setPix(pix);
 
-	    			if (sourceAccount.getBalance().compareTo(amount) < 0) {
-	    		        throw new InsufficientBalanceException("Insufficient balance to perform the Pix.");
-	    		    }
+        sourceAccount.setBalance(sourceAccount.getBalance().subtract(amount));
+        accountRepository.save(sourceAccount);
 
+        transactionRepository.save(transaction);
 
-	    	Transactions transaction = new Transactions();
-	        transaction.setSourceAccountId(sourceAccountId);
-	        transaction.setPix(pix);
-	        transaction.setAmount(amount);
-	        transaction.setTransactionType("PIX");
-	        transaction.setTimestamp(LocalDateTime.now());
+        return transaction;
+    }
 
+    private Transactions createTransaction(Long sourceAccountId, BigDecimal amount, String transactionType) {
+        Transactions transaction = new Transactions();
+        transaction.setSourceAccountId(sourceAccountId);
+        transaction.setAmount(amount);
+        transaction.setTransactionType(transactionType);
+        transaction.setTimestamp(LocalDateTime.now());
+        return transaction;
+    }
 
-	    
-	        sourceAccount.setBalance(sourceAccount.getBalance().subtract(amount));
-	        accountRepository.save(sourceAccount);
+    public List<ExtratoDTO> consultarExtrato(Long accountId, LocalDateTime startDate, LocalDateTime endDate) {
+        List<Transactions> transactions = transactionRepository.findBySourceAccountIdAndDateTimeBetween(accountId, startDate, endDate);
 
-	     
-	        transactionRepository.save(transaction);
-
-	        return transaction;
-	    }
-
-	    
-	    public List<ExtratoDTO> consultarExtrato(Long accountId, LocalDateTime startDate, LocalDateTime endDate) {
-
-	    
-	    	List<Transactions> transactions = transactionRepository.findBySourceAccountIdAndDateTimeBetween(accountId, startDate, endDate);
-
-	     
-	    	return transactions.stream().map(transaction -> {
-	            ExtratoDTO dto = new ExtratoDTO();
-	          //  dto.setId(transaction.getId());
-	            dto.setSourceAccountId(transaction.getSourceAccountId());
-	            dto.setDestinationAccountId(transaction.getDestinationAccountId());
-	            dto.setAmount(transaction.getAmount());
-	            dto.setTransactionType(transaction.getTransactionType()); 
-	            dto.setTimestamp(transaction.getTimestamp());
-	            return dto;
-	        }).collect(Collectors.toList());
-	    }
-
-	  
-	}
-
-	
+        return transactions.stream().map(transaction -> {
+            ExtratoDTO dto = new ExtratoDTO();
+            dto.setSourceAccountId(transaction.getSourceAccountId());
+            dto.setDestinationAccountId(transaction.getDestinationAccountId());
+            dto.setAmount(transaction.getAmount());
+            dto.setTransactionType(transaction.getTransactionType());
+            dto.setTimestamp(transaction.getTimestamp());
+            return dto;
+        }).collect(Collectors.toList());
+    }
+}

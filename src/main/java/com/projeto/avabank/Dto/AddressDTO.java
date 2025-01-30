@@ -11,6 +11,8 @@ public class AddressDTO {
 	private String city;
 	private String state;
 	private Long userId;
+	
+	
 	public Long getAddressId() {
 		return addressId;
 	}

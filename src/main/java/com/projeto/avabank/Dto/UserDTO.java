@@ -8,7 +8,7 @@ public class UserDTO {
 	private Long userId;
 	private String name;
 	private String cpf;
-	private LocalDate dbirthDate;
+	private LocalDate birthDate;
 	private String email;
 	private String phone;
 	private LocalDateTime creationDate;
@@ -47,12 +47,12 @@ public class UserDTO {
 		this.cpf = cpf;
 	}
 
-	public LocalDate getDbirthDate() {
-		return dbirthDate;
+	public LocalDate getBirthDate() {
+		return birthDate;
 	}
 
-	public void setDbirthDate(LocalDate dbirthDate) {
-		this.dbirthDate = dbirthDate;
+	public void setBirthDate(LocalDate dbirthDate) {
+		this.birthDate = dbirthDate;
 	}
 
 	public String getEmail() {

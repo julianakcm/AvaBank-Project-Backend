@@ -3,6 +3,11 @@ package com.projeto.avabank.Dto;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
+@AllArgsConstructor
+@NoArgsConstructor
 public class ExtratoDTO {
     
 	    private Long AccountId;
