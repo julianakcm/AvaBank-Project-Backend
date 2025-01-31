@@ -46,15 +46,15 @@ public class Account {
 	@Column(nullable = false)
 	private int benefitId;
 	
-	@Column(nullable = false)
-	private int userId;
+
 	
 	
-	  @ManyToOne
-	    @JoinColumn(name = "user_id")
-	    private User user;
+    @ManyToOne
+    @JoinColumn(name = "userId")
+    private User user;
+
 	
-	@ManyToMany
+    @ManyToMany
     @JoinTable(
         name = "Conta_Beneficio", 
         joinColumns = @JoinColumn(name = "accountId"), 
@@ -62,10 +62,11 @@ public class Account {
     )
     private List<Benefits> beneficios;
 
-    @OneToOne
-    @JoinColumn(name = "userId", referencedColumnName = "userId")
-    private User usuario;
 
+
+    
+    
+    
 	public Long getAccountId() {
 		return accountId;
 	}
@@ -130,13 +131,7 @@ public class Account {
 		this.benefitId = benefitId;
 	}
 
-	public int getUserId() {
-		return userId;
-	}
 
-	public void setUserId(int userId) {
-		this.userId = userId;
-	}
 
 	public List<Benefits> getBeneficios() {
 		return beneficios;
@@ -146,13 +141,7 @@ public class Account {
 		this.beneficios = beneficios;
 	}
 
-	public User getUsuario() {
-		return usuario;
-	}
-
-	public void setUsuario(User usuario) {
-		this.usuario = usuario;
-	}
+	
 
 	public User getUser() {
 		return user;

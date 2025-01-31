@@ -18,14 +18,14 @@ public class UserController {
     private UserService userService;
 
     // Criar usuário (necessita de DTO)
-    @PostMapping
+    @PostMapping ("/createUser")
     public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO) {
         UserDTO createdUserDTO = userService.createUser(userDTO);
         return ResponseEntity.ok(createdUserDTO);
     }
 
     // Buscar todos os usuários (não precisa de DTO)
-    @GetMapping
+    @GetMapping("/findAllUsers")
     public ResponseEntity<List<User>> findAll() {
         List<User> users = userService.findAll();
         return ResponseEntity.ok(users);

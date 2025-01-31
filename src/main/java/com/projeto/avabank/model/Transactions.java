@@ -16,71 +16,72 @@ import jakarta.persistence.Table;
 @Table(name = "Transacoes")
 public class Transactions {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long transactionId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long transactionId;
 
-	@Column(nullable = false)
-	private long sourceAccountId;
+    @Column(nullable = false)
+    private Long sourceAccountId;
 
-	@Column(nullable = false)
-	private long destinationAccountId;
+    @Column(nullable = false)
+    private Long destinationAccountId;
 
-	@Column(nullable = false)
-	private BigDecimal amount;
+    @Column(nullable = false)
+    private BigDecimal amount;
 
-	@Column(nullable = false)
-	private String transactionType;
+    @Column(nullable = false)
+    private String transactionType;
 
-	@Column(name = "dateHour",nullable = false)
-	private LocalDateTime timestamp;
+    @Column(name = "dateHour", nullable = false)
+    private LocalDateTime timestamp;
 
-	@Column
-	private String description;
+    @Column
+    private String description;
 
-	@Column
-	private float tfee;
-	
-	@Column
-	private String pix;
+    @Column
+    private float tfee;
 
-	public String getPix() {
-		return pix;
-	}
+    @Column
+    private String pix;
 
-	public void setPix(String pix) {
-		this.pix = pix;
-	}
+    public String getPix() {
+        return pix;
+    }
 
-	@ManyToOne
-	@JoinColumn(name = "sourceAccountId", nullable = false)
-	private Account sourceAccount;
+    public void setPix(String pix) {
+        this.pix = pix;
+    }
 
-	@ManyToOne
-	@JoinColumn(name = "destinationAccountId;", nullable = false)
-	private Account destinationAccount;
+    @ManyToOne
+    @JoinColumn(name = "sourceAccountId", nullable = false, insertable = false, updatable = false)
+    private Account sourceAccount;
 
-	public long getTransactionId() {
+    
+    @ManyToOne
+    @JoinColumn(name = "destinationAccountId", nullable = false, insertable = false, updatable = false)
+    private Account destinationAccount;
+
+	public Long getTransactionId() {
 		return transactionId;
 	}
 
-	public void setTransactionId(long transactionId) {
+	public void setTransactionId(Long transactionId) {
 		this.transactionId = transactionId;
 	}
 
-	public long getSourceAccountId() {
+	public Long getSourceAccountId() {
 		return sourceAccountId;
 	}
 
-	public void setSourceAccountId(long sourceAccountId) {
+	public void setSourceAccountId(Long sourceAccountId) {
 		this.sourceAccountId = sourceAccountId;
 	}
 
-	public long getDestinationAccountId() {
+	public Long getDestinationAccountId() {
 		return destinationAccountId;
 	}
 
-	public void setDestinationAccountId(long destinationAccountId) {
+	public void setDestinationAccountId(Long destinationAccountId) {
 		this.destinationAccountId = destinationAccountId;
 	}
 
@@ -140,9 +141,5 @@ public class Transactions {
 		this.destinationAccount = destinationAccount;
 	}
 
-	
-	
-	
-	
-
+    
 }

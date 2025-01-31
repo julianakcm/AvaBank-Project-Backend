@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -45,8 +46,7 @@ public class User {
 	@Column(nullable = false)
 	private LocalDateTime creationDate;
 	
-	@Column(nullable = false)
-	private long userTypeId;
+
 	
 	@Column(nullable = false)
 	private String password;
@@ -54,195 +54,118 @@ public class User {
 	@Column(nullable = false)
 	private boolean enabled;
 	
-	   @ManyToOne
-	    @JoinColumn(name = "id_Tipo_Usuario", nullable = false)
-	    private UserType userType;
-	   
-	   public LocalDate getBirthDate() {
-		return birthDate;
-	}
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "userTypeId", nullable = false)
+    private UserType userType;
 
-
-	public void setBirthDate(LocalDate birthDate) {
-		this.birthDate = birthDate;
-	}
-
-
-	public Address getAddress() {
-		return address;
-	}
-
-
-	public void setAddress(Address address) {
-		this.address = address;
-	}
-	
-	//teste
-	
-	@ManyToOne
-	@JoinColumn(name = "user_id")
-	private User user;
-
-	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+	    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
 	    private Address address;
-	   
-	    @OneToOne(mappedBy = "user",cascade = CascadeType.ALL, orphanRemoval = true)
-	    //private Set<Note> notes = new HashSet<>();
+
+	    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
 	    private Account account;
-
-
-	    @ManyToMany(fetch = FetchType.LAZY)
-	    @JoinTable(
-	        name = "users_user_types",
-	        joinColumns = @JoinColumn(name = "user_id"),
-	        inverseJoinColumns = @JoinColumn(name = "user_type_id")
-	    )
-	    private Set<UserType> userTypes = new HashSet<>();
 	    
 	    
-		public Set<UserType> getUserTypes() {
-			return userTypes;
-		}
-
-
-		public void setUserTypes(Set<UserType> userTypes) {
-			this.userTypes = userTypes;
-		}
-
-
-		public boolean isEnabled() {
-			return enabled;
-		}
-
-
-		public void setEnabled(boolean enabled) {
-			this.enabled = enabled;
-		}
-
-
-		public String getPassword() {
-			return password;
-		}
-
-
-		public void setPassword(String password) {
-			password = password;
-		}
-
-
-
+		
+			
+		
+		
 
 		public Long getUserId() {
 			return userId;
 		}
 
-
 		public void setUserId(Long userId) {
 			this.userId = userId;
 		}
-
 
 		public String getName() {
 			return name;
 		}
 
-
 		public void setName(String name) {
 			this.name = name;
 		}
-
 
 		public String getCpf() {
 			return cpf;
 		}
 
-
 		public void setCpf(String cpf) {
 			this.cpf = cpf;
 		}
 
-
-		public LocalDate getDbirthDate() {
+		public LocalDate getBirthDate() {
 			return birthDate;
 		}
 
-
-		public void setDbirthDate(LocalDate dbirthDate) {
-			this.birthDate = dbirthDate;
+		public void setBirthDate(LocalDate birthDate) {
+			this.birthDate = birthDate;
 		}
-
 
 		public String getEmail() {
 			return email;
 		}
 
-
 		public void setEmail(String email) {
 			this.email = email;
 		}
-
 
 		public String getPhone() {
 			return phone;
 		}
 
-
 		public void setPhone(String phone) {
 			this.phone = phone;
 		}
-
 
 		public LocalDateTime getCreationDate() {
 			return creationDate;
 		}
 
-
 		public void setCreationDate(LocalDateTime creationDate) {
 			this.creationDate = creationDate;
 		}
 
-
-		public long getUserTypeId() {
-			return userTypeId;
+		public String getPassword() {
+			return password;
 		}
 
-
-		public void setUserTypeId(long userTypeId) {
-			this.userTypeId = userTypeId;
+		public void setPassword(String password) {
+			this.password = password;
 		}
 
+		public boolean isEnabled() {
+			return enabled;
+		}
+
+		public void setEnabled(boolean enabled) {
+			this.enabled = enabled;
+		}
 
 		public UserType getUserType() {
 			return userType;
 		}
 
-
 		public void setUserType(UserType userType) {
 			this.userType = userType;
 		}
 
+		public Address getAddress() {
+			return address;
+		}
+
+		public void setAddress(Address address) {
+			this.address = address;
+		}
 
 		public Account getAccount() {
 			return account;
 		}
 
-
 		public void setAccount(Account account) {
 			this.account = account;
 		}
-
-
-		public User getUser() {
-			return user;
-		}
-
-
-		public void setUser(User user) {
-			this.user = user;
-		}
-
-
-	
 	    
 	    
-}
+	   
+	}

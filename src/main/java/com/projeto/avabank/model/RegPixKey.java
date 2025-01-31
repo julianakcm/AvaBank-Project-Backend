@@ -8,29 +8,32 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
- 
+
 @Entity
-@Table(name = "CadastroPix")
-public class RegPixKey { //PixKey
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long pixId;
-	
-	@Column(nullable = false)
-	private String pixType;
-	
-	@Column(nullable = false)
-	private String pix;
-	
-	@Column(nullable = false)
-	private Long userId; 
-	
-	@ManyToOne
-    @JoinColumn(name = "userId", nullable = false)
+@Table(name = "RegPixKey")
+public class RegPixKey {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long pixId;
+
+    @Column(nullable = false)
+    private Long userId;  // Coluna user_id
+
+    // Outros campos...
+
+    @ManyToOne
+    @JoinColumn(name = "userId", insertable = false, updatable = false, nullable = false)  // Evitar duplicação de mapeamento
     private User user;
 
-	public Long getPixId() {
+    // Getters e Setters
+   
+    
+    public Long getUserId() {
+        return userId;
+    }
+
+    public Long getPixId() {
 		return pixId;
 	}
 
@@ -38,39 +41,19 @@ public class RegPixKey { //PixKey
 		this.pixId = pixId;
 	}
 
-	public String getPixType() {
-		return pixType;
-	}
-
-	public void setPixType(String pixType) {
-		this.pixType = pixType;
-	}
-
-	public String getPix() {
-		return pix;
-	}
-
-	public void setPix(String pix) {
-		this.pix = pix;
-	}
-
-	public Long getUserId() {
-		return userId;
-	}
-
 	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 
-	public User getUser() {
-		return user;
-	}
+	public void setUserId(long userId) {
+        this.userId = userId;
+    }
 
-	public void setUser(User user) {
-		this.user = user;
-	}
+    public User getUser() {
+        return user;
+    }
 
-	
-	
-	
-	}
+    public void setUser(User user) {
+        this.user = user;
+    }
+}

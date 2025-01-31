@@ -11,8 +11,8 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
 	Account findByCpf (String cpf);
 	Account findByiD (String accountId);
 
-	boolean findIfExistByAccountNumber(int randNumber);
+	boolean findIfExistByAccountNumber(String randNumber);
 	
-	Account findByAccountAndAgency(String account, String agency);
+	Account findByAccountAndAgency(String accountNumber, String agency);
 	
 }

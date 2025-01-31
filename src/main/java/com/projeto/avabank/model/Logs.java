@@ -31,10 +31,7 @@ public class Logs {
 	
 	@Column(name = "dateHour",nullable = false)
 	private LocalDateTime timestamp;
-	
-	@Column(nullable = false)
-	private Long userId; 
-	
+
 	
 	@ManyToOne
     @JoinColumn(name = "userId", nullable = false)
@@ -81,14 +78,6 @@ public class Logs {
 	}
 
 
-	public Long getUserId() {
-		return userId;
-	}
-
-
-	public void setUserId(Long userId) {
-		this.userId = userId;
-	}
 
 
 	public User getUser() {

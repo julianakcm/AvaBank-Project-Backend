@@ -10,7 +10,7 @@ import com.projeto.avabank.model.Transactions;
 
 public interface TransactionsRepository extends JpaRepository<Transactions, Long> {
 	
-	List <Transactions> findByAccountId(Long AccountId);
+	List <Transactions> findByAccountId(Long UserId);
 	
 	List<Transactions> findByAccountIdAndDate(Long AccountId, LocalDate startDate, LocalDate endDate);
 
